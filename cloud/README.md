@@ -12,6 +12,7 @@ const state = await readLatestPublication({
   projectUrl: 'https://uiymcsbioevuyyoeirba.supabase.co',
   publishableKey: '<project publishable key, safe for browsers>',
   eventId: 'dinkabalen-2026',
+  expectedEventDate: '2026-12-05',
   scheduleFingerprint: '<SHA-256 of canonical schedule manifest>',
 });
 ```
@@ -25,7 +26,7 @@ The credential in the example is a placeholder. **Never embed any service_role /
 
 ## Activation gates
 
-1. Receive the committee's new tournament date and any changes to venue, opening time or fixtures.
+1. The tournament is rescheduled to **Saturday, December 5, 2026**. The current provisional operating assumptions are 6:00 PM, Pickle Cave, five courts and the existing 67 fixtures; reconfirm any other organizer changes before deployment.
 2. Complete an authenticated publisher pilot in Supabase, with an approved publisher and independent proof that unauthorized users cannot publish.
 3. Publish **synthetic** test snapshots only after an isolation plan; do not mix them with event production snapshots.
 4. Integrate the reader into the portal's existing data model in a separate PR; avoid duplicating standings/qualification algorithms. Test the full 67-fixture and 30-slot parity.
