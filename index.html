@@ -701,8 +701,8 @@ main tr.in .rk,main .rk-in{background:var(--lime);color:var(--lime-ink)}
 /* ---- 1. Tournament configuration ---- */
 const TOURNAMENT = {
   name: 'Dinkabalen 2026',
-  dateLabel: 'Saturday, November 7, 2026',
-  date: '2026-11-07',
+  dateLabel: 'Saturday, December 5, 2026',
+  date: '2026-12-05',
   timeZone: 'Asia/Manila',
   utcOffset: '+08:00',      // Asia/Manila has no daylight saving time
   start: '18:00', finish: '23:00', bufferEnd: '23:20',
@@ -782,7 +782,7 @@ const SCHEDULE = [
      'HI-SF1':      { status: 'live', teams: ['HI-1', 'HI-4'], score: [6, 4] }, */
 const RESULTS = {
 };
-const PUBLISHED_AT = null;   // e.g. '2026-11-07T19:42:00+08:00'. Set by Publish player portal.
+const PUBLISHED_AT = null;   // e.g. '2026-12-05T19:42:00+08:00'. Set by Publish player portal.
 const PUBLISH_REVISION = null;   // publication number, increases with every validated publish
 /* ===================================================================== */
 
@@ -989,7 +989,7 @@ function runChecks() {
 const CHECKS = runChecks();
 for (const k of RANKING) if (!CRITERIA[k]) notes.push(`Ranking criterion "${k}" is not recognised and is ignored.`);
 const pubDate = publishedAt ? new Date(publishedAt) : null;
-if (pubDate && isNaN(pubDate)) notes.push('PUBLISHED_AT is not a valid date-time. Use the form 2026-11-07T19:42:00+08:00.');
+if (pubDate && isNaN(pubDate)) notes.push('PUBLISHED_AT is not a valid date-time. Use the form 2026-12-05T19:42:00+08:00.');
 
 /* =====================================================================
    PRESENTATION. Everything below reads the engine above; it never changes
