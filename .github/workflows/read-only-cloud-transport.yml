@@ -1,0 +1,22 @@
+name: Read-only publication transport
+on:
+  push:
+    paths:
+      - 'cloud/**'
+      - '.github/workflows/read-only-cloud-transport.yml'
+  pull_request:
+    paths:
+      - 'cloud/**'
+      - '.github/workflows/read-only-cloud-transport.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test publication client without network or secrets
+        run: node --test cloud/test-read-publication.mjs
