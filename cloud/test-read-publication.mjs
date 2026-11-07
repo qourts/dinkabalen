@@ -4,7 +4,7 @@ import {createHash} from "node:crypto";
 import {readLatestPublication} from "./read-publication.mjs";
 const base={projectUrl:"https://uiymcsbioevuyyoeirba.supabase.co",
   publishableKey:"sb_publishable_testonly",eventId:"dinkabalen-2026",
-  scheduleFingerprint:"a".repeat(64)};
+  scheduleFingerprint:"a".repeat(64),expectedEventDate:"2026-12-05"};
 const snapshot=()=>({eventId:base.eventId,scheduleFingerprint:base.scheduleFingerprint,
   eventDate:"2026-12-05",fixtures:Array.from({length:67},(_,i)=>({id:"M"+i})),
   roster:Object.fromEntries(Array.from({length:30},(_,i)=>["T"+i,{players:["",""]}])),results:{}});
@@ -25,6 +25,16 @@ test("digest mismatch rejected",async()=>{
 test("wrong event rejected",async()=>{
  const s=snapshot();s.eventId="other";
  assert.equal((await readLatestPublication({...base,fetcher:response([row(s)])})).state,"invalid");
+});
+test("snapshots with prior tournament date are rejected",async()=>{
+ const s=snapshot();s.eventDate="2026-11-07";
+ const result=await readLatestPublication({...base,fetcher:response([row(s)])});
+ assert.equal(result.state,"invalid");
+});
+test("approved tournament date is required by reader",async()=>{
+ const {expectedEventDate,...missing}=base;
+ const result=await readLatestPublication({...missing,fetcher:response([row()])});
+ assert.equal(result.state,"configuration_error");
 });
 test("network failure never masquerades as fresh",async()=>{
  const r=await readLatestPublication({...base,fetcher:async()=>{throw Error("offline")}});
