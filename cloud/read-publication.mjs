@@ -8,7 +8,7 @@ const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
 
 export async function readLatestPublication({
   projectUrl, publishableKey, eventId="dinkabalen-2026",
-  scheduleFingerprint, fetcher=fetch
+  scheduleFingerprint, expectedEventDate, fetcher=fetch
 }) {
   if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(String(projectUrl||"")))
     return {state:"configuration_error",reason:"invalid_project_url"};
@@ -16,6 +16,8 @@ export async function readLatestPublication({
     return {state:"configuration_error",reason:"missing_publishable_key"};
   if(!/^[a-f0-9]{64}$/.test(String(scheduleFingerprint||"")))
     return {state:"configuration_error",reason:"missing_schedule_fingerprint"};
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(expectedEventDate||"")))
+    return {state:"configuration_error",reason:"missing_approved_event_date"};
   const params=new URLSearchParams({
     select:"revision,source_sha256,published_at,snapshot",
     event_id:"eq."+eventId,
@@ -38,7 +40,7 @@ export async function readLatestPublication({
   const row=rows[0], snapshot=row?.snapshot;
   const revision=Number(row?.revision);
   if(!Number.isSafeInteger(revision)||revision<=0||!isObject(snapshot)||
-     snapshot.eventId!==eventId || snapshot.scheduleFingerprint!==scheduleFingerprint ||
+     snapshot.eventId!==eventId || snapshot.eventDate!==expectedEventDate || snapshot.scheduleFingerprint!==scheduleFingerprint ||
      !Array.isArray(snapshot.fixtures)||snapshot.fixtures.length!==67 ||
      !isObject(snapshot.results)||!isObject(snapshot.roster) ||
      Object.keys(snapshot.roster).length!==30 ||
